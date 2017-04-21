@@ -8,7 +8,7 @@ import (
 // Logger is just a simple Logger interface
 // it should already be satisifed by many other loggers (e.g logrus)
 type Logger interface {
-	Info(msg string)
+	Info(msg ...interface{})
 }
 
 // WrapWithLogger wraps a given UDPRouter with a logger
@@ -28,8 +28,8 @@ func loggingHandler(handleFn UDPHandleFunc, logger Logger, route string) UDPHand
 	return func(body string, respond UDPResponseFunc) {
 		handleFn(body, respond)
 
-		// Log request time, route and body
-		msg := fmt.Sprintf("%s|%s|%s", time.Now(), route, body)
+		// Log request time and route
+		msg := fmt.Sprintf("%s|%s", time.Now(), route)
 		logger.Info(msg)
 	}
 }
